@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 //vars
-var keys = require("../keys.js");
+var keys = require("./keys");
 var fs = require("fs");
 var axios = require("axios");
 var Spotify = require('node-spotify-api');
@@ -10,13 +10,25 @@ var Spotify = require('node-spotify-api');
 
 
 //argv[2] chooses users actions; argv[3] is input parameter, ie; movie title
-var userCommand = process.argv[2];
-var secondCommand = process.argv[3];
+// var userCommand = process.argv[2];
+// var secondCommand = [...process.argv];
 
-//concatenate multiple words in 2nd user argument
-for (var i = 4; i < process.argv.length; i++) {
-    secondCommand += '+' + process.argv[i];
-}
+var [
+    nothing,
+    nothing,
+    userCommand,
+    ...songs
+] = process.argv
+
+
+// console.log(songs);
+// //concatenate multiple words in 2nd user argument
+// for (var i = 4; i < process.argv.length; i++) {
+//     secondCommand += '+' + process.argv[i];
+// }
+
+
+console.log(userCommand);
 // console.log(secondCommand);
 // Fetch Spotify Keys
 var spotify = new Spotify(keys.spotify);
@@ -35,7 +47,7 @@ var getSpotify = function (songName) {
     spotify.search(
         {
             type: "track",
-            query: userCommand
+            query: songName
         },
         function (err, data) {
             if (err) {
@@ -64,7 +76,8 @@ function mySwitch(userCommand) {
     switch (userCommand) {
 
         case "spotify-this-song":
-            getSpotify();
+
+            getSpotify(songs.join(" "));
             break;
 
         case "movie-this":
@@ -125,13 +138,13 @@ function mySwitch(userCommand) {
             if (!error);
             console.log(data.toString());
             //split text with comma delimiter
-            var = data.toString().split(',');
+            var cmds = data.toString().split(',');
         });
     }
 
 
 
-}   //Closes mySwitch func - Everything except the call must be within this scope
+}
 
 //Call mySwitch function
 mySwitch(userCommand);

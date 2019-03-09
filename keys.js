@@ -1,4 +1,5 @@
 console.log('this is loaded');
+require("dotenv")
 
 exports.spotify = {
     id: process.env.SPOTIFY_ID,
